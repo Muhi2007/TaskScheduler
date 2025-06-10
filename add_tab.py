@@ -1,10 +1,12 @@
 import tkinter as tk
+
+import modify_tab
 import globals
 
 def open_modify_window(parent, name):
     print(list(globals.task_names_dct.keys()))
     
-    label = globals.task_names_dct[name]
+    label = globals.task_names_dct[name][0]
 
     win = tk.Toplevel(parent)
     win.title("Modify Task")
@@ -25,26 +27,29 @@ def open_modify_window(parent, name):
     entry_time.pack(pady=5)
 
     def save_changes():
+        namesLst = globals.task_names_dct.keys()
         new_text = entry.get()
         new_time = entry_time.get()
+
+        
         if name == new_text:
-            print(1)
             coulmn[0].config(text= new_text)
             coulmn[1].config(text= new_time)
-            globals.task_names_dct[new_text] = label
-        elif new_text not in list(globals.task_names_dct.keys()):
-            print(2)
+            modify_tab.save_tab(label, new_text, new_time)
+
+        elif new_text not in list(namesLst):
             coulmn[0].config(text= new_text)
             coulmn[1].config(text= new_time)
             button[0].config(command=lambda: open_modify_window(parent, new_text))
-            globals.task_names_dct[new_text] = label
-            globals.task_names_dct.pop(name)
-        elif new_text in list(globals.task_names_dct.keys()) and info[1] != new_time:
+            modify_tab.save_tab(label, new_text, new_time)
+            modify_tab.del_csv(name)
+
+        elif new_text in list(namesLst) and info[1] != new_time:
             coulmn[1].config(text= new_time)
-            globals.task_names_dct[new_text] = label
+            globals.task_names_dct[new_text] = [label, new_time]
+
         else:
             print("This name is already taken!")
-            print(4)
 
         
         win.destroy()
@@ -56,19 +61,18 @@ def add_task(parent, name):
     task_frame = tk.Frame(parent, bg="white", bd=1, relief="solid")
     task_frame.pack(fill="x", padx=5, pady=5)
 
-    globals.task_names_dct[name] = task_frame
-
     name_label = tk.Label(task_frame, text=name, anchor="w", bg="white", font=("Segoe UI", 11))
     name_label.pack(side="left", fill="x", expand=True, padx=(10, 5), pady=10)
 
-    time_label = tk.Label(task_frame, text='Time', anchor="center", bg="white", font=("Segoe UI", 11))
+    time_label = tk.Label(task_frame, anchor="center", bg="white", font=("Segoe UI", 11))
     time_label.pack(side="left", padx=(5, 5), pady=10)
 
     edit_btn = tk.Button(task_frame, text="Edit", font=("Segoe UI", 10), command=lambda: open_modify_window(parent, name))
     edit_btn.pack(side="right", padx=(5, 10), pady=10)
 
+    del_btn = tk.Button(task_frame, text="Remove", font=("Segoe UI", 10))
+    del_btn.pack(side="right", padx=(5,10), pady=10)
+
+    modify_tab.save_tab(task_frame, name, "Time")    
+
     return task_frame
-
-
-    
- 

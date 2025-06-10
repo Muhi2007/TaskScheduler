@@ -5,6 +5,7 @@ import sys
 
 import globals
 import add_tab
+import modify_tab
 
 sys.stdout.reconfigure(encoding="utf-8")
 
@@ -26,7 +27,7 @@ bottom_frame.pack(side="bottom", fill="both", expand=True, padx=10, pady=(0, 10)
 
 
 task_canvas = tk.Canvas(bottom_frame, bg="white")
-task_scroll = tk.Scrollbar(bottom_frame, orient="vertical", width=5, command=task_canvas.yview)
+task_scroll = tk.Scrollbar(bottom_frame, orient="vertical", command=task_canvas.yview)
 
 task_holder = tk.Frame(task_canvas, bg="white")
 
@@ -50,12 +51,11 @@ def handler():
         add_tab.open_modify_window(root, text)
     else:
         add_tab.add_task(task_holder, text)
-    
-    
+
+
 add_button = tk.Button(top_frame, text="Add Task", font=("Segoe UI", 11), command=handler)
 add_button.pack(side="left", padx=10)
 
-for i in range(10):
-    add_tab.add_task(task_holder, f"Schedule{i+1}")
+modify_tab.load_tabs(task_holder)
 
 root.mainloop()
