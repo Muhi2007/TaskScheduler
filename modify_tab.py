@@ -19,8 +19,8 @@ def del_csv(name):
 
     try:
         with open(fileName, "w", encoding="utf-8") as file:
-            json.dump(globals.task_names_dct, file, indent=4)
-        print("Tasks saved successfully.")
+            json.dump(save_dct, file, indent=4)
+        print("Tasks deleted successfully.")
     except Exception as e:
         print(f"Error saving tasks: {e}")
 
@@ -29,6 +29,7 @@ def del_csv(name):
 def save_tab(label, newName, time):
     globals.task_names_dct[newName] = [label, time]
     print(globals.task_names_dct)
+
     save_dct = {}
     for names in globals.task_names_dct:
         save_dct[names] = globals.task_names_dct[names][1]

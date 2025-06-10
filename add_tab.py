@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 
 import modify_tab
 import globals
@@ -21,10 +22,12 @@ def open_modify_window(parent, name):
     entry = tk.Entry(win, width=40)
     entry.insert(0, info[0])
     entry.pack(pady=5)
+    entry.bind("<Return>", lambda e: save_changes())
 
     entry_time = tk.Entry(win, width=40)
     entry_time.insert(0, info[1])
     entry_time.pack(pady=5)
+    entry_time.bind("<Return>", lambda e: save_changes())
 
     def save_changes():
         namesLst = globals.task_names_dct.keys()
@@ -41,6 +44,7 @@ def open_modify_window(parent, name):
             coulmn[0].config(text= new_text)
             coulmn[1].config(text= new_time)
             button[0].config(command=lambda: open_modify_window(parent, new_text))
+            button[1].config(command= lambda: del_or_not(label, new_text))
             modify_tab.save_tab(label, new_text, new_time)
             modify_tab.del_csv(name)
 
@@ -57,6 +61,17 @@ def open_modify_window(parent, name):
     tk.Button(win, text="Save", command=save_changes).pack(pady=10)
 
 
+def del_or_not(parent, name):
+    message = messagebox.askyesno("REMOVING TASK", f"You are sure to delete {name}?")
+    if message:
+        parent.destroy()
+        modify_tab.del_csv(name)
+    else:
+        print("As you wish")
+
+
+
+
 def add_task(parent, name):
     task_frame = tk.Frame(parent, bg="white", bd=1, relief="solid")
     task_frame.pack(fill="x", padx=5, pady=5)
@@ -70,7 +85,7 @@ def add_task(parent, name):
     edit_btn = tk.Button(task_frame, text="Edit", font=("Segoe UI", 10), command=lambda: open_modify_window(parent, name))
     edit_btn.pack(side="right", padx=(5, 10), pady=10)
 
-    del_btn = tk.Button(task_frame, text="Remove", font=("Segoe UI", 10))
+    del_btn = tk.Button(task_frame, text="Remove", font=("Segoe UI", 10), command= lambda: del_or_not(task_frame, name))
     del_btn.pack(side="right", padx=(5,10), pady=10)
 
     modify_tab.save_tab(task_frame, name, "Time")    

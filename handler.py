@@ -16,7 +16,7 @@ def load_task(parent, name, time):
     edit_btn = tk.Button(task_frame, text="Edit", font=("Segoe UI", 10), command=lambda: add_tab.open_modify_window(parent, name))
     edit_btn.pack(side="right", padx=(5, 10), pady=10)
 
-    del_btn = tk.Button(task_frame, text="Remove", font=("Segoe UI", 10))
+    del_btn = tk.Button(task_frame, text="Remove", font=("Segoe UI", 10), command= lambda: add_tab.del_or_not(task_frame, name))
     del_btn.pack(side="right", padx=(5,10), pady=10)
 
     globals.task_names_dct[name] = [task_frame, time]

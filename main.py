@@ -20,7 +20,9 @@ top_frame.pack(side="top", fill="x", padx=10, pady=(10, 5))
 
 task_entry = tk.Entry(top_frame, width=60, font=("Segoe UI", 12))
 task_entry.pack(side="left", padx=(10, 5), pady=20)
-
+task_entry.insert(0, "Enter task name here...")
+task_entry.bind("<Return>", lambda e: add_button.invoke())
+task_entry.bind("<FocusIn>", lambda e: task_entry.delete(0, tk.END) if task_entry.get() == "Enter task name here..." else None)
 
 bottom_frame = tk.Frame(root)
 bottom_frame.pack(side="bottom", fill="both", expand=True, padx=10, pady=(0, 10))
@@ -42,7 +44,6 @@ task_holder.bind("<Configure>", lambda e: task_canvas.configure(scrollregion=tas
 task_canvas.configure(yscrollcommand=task_scroll.set)
 task_canvas.pack(side="left", fill="both", expand=True)
 task_scroll.pack(side="right", fill="y")
-
 
 def handler():
     text = task_entry.get()
